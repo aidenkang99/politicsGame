@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>War Against Communism</title>
     <style>
-        #score1, #redForward{
+        #score1, #redForward, #messageBackwards{
             -moz-transform: rotate(-180deg);  /* FF3.5+ */
             -o-transform: rotate(-180deg);  /* Opera 10.5 */
             -webkit-transform: rotate(-180deg);  /* Safari 3.1+, Chrome */
@@ -19,14 +19,19 @@
         }
         button{
             position: absolute;
+            border: 1px solid grey;
         }
         #redForward{
             margin-left: 150px;
             margin-top: 20px;
+            background-color: red;
+            color: #fff;
         }
         #blueForward{
             margin-top: 580px;
             margin-left: -200px;
+            background-color: blue;
+            color: #fff;
         }
         .score{
             border: 1px solid #000;
@@ -52,19 +57,68 @@
             height: 100%;
             overflow: hidden;
         }
+        #messageBackwards, #message{
+            width: 340px;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 18pt;
+        }
+        #message{
+            margin-top: 380px;
+        }
+        #start{
+            background-color: green;
+            color: #fff;
+            width: 50px;
+            height: 40px;
+            position: absolute;
+            margin-left: 160px;
+            margin-top: 280px;
+        }
+        img{
+            position: absolute;
+            width: 50px;
+        }
+        #arrow1{
+            margin-left: -110px;
+            margin-top: 400px;
+        }
+        #arrow2{
+            margin-left: -110px;
+            margin-top: 100px;
+            transform: rotate(180deg) scaleX(-1);
+        }
     </style>
     <script type="text/javascript" src="jquery_library.js"></script>
 </head>
 <body>
-    <button id="redForward">Forward</button>
-    <canvas id="communist" ></canvas>
-    <canvas id="capitalist" ></canvas>
-    <div id="score">
-        <div class="score" id="score1">&nbsp;</div>
-        <div class="score" id="score2">&nbsp;</div>
+    <div id="messageBackwards">
+        <p>
+            Click the "Forward" button as much as you can!<br \><br \>
+            You get one score when your circle reaches the other border.
+            You win the game when you reach a score of 3.
+        </p>
     </div>
-    <div id="gameOver">&nbsp;</div>
-    <button id="blueForward">Forward</button>
+    <input type="button" id="start" onclick="initialize()" value="Start">
+    <div id="message">
+        <p>
+            Click the "Forward" button as much as you can!<br \><br \>
+            You get one score when your circle reaches the other border.
+            You win the game when you reach a score of 3.
+        </p>
+    </div>
+    <main>
+        <button id="redForward">Forward</button>
+        <canvas id="communist" ></canvas>
+        <img id="arrow1" src="arrow.png" alt="">
+        <canvas id="capitalist" ></canvas>
+        <img id="arrow2" src="arrow.png" alt="">
+        <div id="score">
+            <div class="score" id="score1">&nbsp;</div>
+            <div class="score" id="score2">&nbsp;</div>
+        </div>
+        <div id="gameOver">&nbsp;</div>
+        <button id="blueForward">Forward</button>
+    </main>
 </body>
 <script>
     var redScore = 0;
@@ -99,11 +153,20 @@
 
     $(document).ready (
         function(){
+            $('main').hide();
+        }
+    );
+
+    function initialize(){
+        $('#messageBackwards').fadeOut(1000);
+        $('#message').fadeOut(1000);
+        $('#start').fadeOut(1000);
+        $('main').delay(1000).fadeIn(1000);
             draw();
             document.getElementById('score1').innerHTML = "Score: " + redScore;
             document.getElementById('score2').innerHTML = "Score: " + blueScore;
-        }
-    );
+    }
+
 
     $("#redForward").click(function() {
         redY += 5;
@@ -127,10 +190,12 @@
         if (team == "red"){
             redScore++;
             document.getElementById("score1").innerHTML = "Score: " + redScore;
+            setInterval(blinkText(team), 1000);
         }
         else{
             blueScore++;
             document.getElementById("score2").innerHTML = "Score: " + blueScore;
+            setInterval(blinkText(team), 1000);
         }
         if (redScore >= 3){
             document.getElementById("gameOver").innerHTML = "Game Over: Communism Won";
@@ -145,6 +210,25 @@
         redY = 100;
         blueX = 90;
         blueY = 400;
+    }
+    function blinkText(team) {
+        if (team=="red"){
+            $('#score1').fadeOut(500);
+            $('#score1').fadeIn(500);
+            $('#score1').delay(500).fadeOut(500);
+            $('#score1').fadeIn(500);
+            $('#score1').delay(1000).fadeOut(500);
+            $('#score1').fadeIn(500);
+        }
+        else{
+            $('#score2').fadeOut(500);
+            $('#score2').fadeIn(500);
+            $('#score1').delay(500).fadeOut(500);
+            $('#score1').fadeIn(500);
+            $('#score1').delay(1000).fadeOut(500);
+            $('#score1').fadeIn(500);
+        }
+        
     }
 </script>
 </html>
