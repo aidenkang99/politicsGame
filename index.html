@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>War Against Communism</title>
+    <style>
+        #score1, #redForward{
+            -moz-transform: rotate(-180deg);  /* FF3.5+ */
+            -o-transform: rotate(-180deg);  /* Opera 10.5 */
+            -webkit-transform: rotate(-180deg);  /* Safari 3.1+, Chrome */
+            position: absolute;
+        }
+        canvas{
+            float: left;
+            border: 1px grey solid;
+            margin-top: 50px;
+        }
+        button{
+            position: absolute;
+        }
+        #redForward{
+            margin-left: 150px;
+            margin-top: 20px;
+        }
+        #blueForward{
+            margin-top: 580px;
+            margin-left: -200px;
+        }
+        .score{
+            border: 1px solid #000;
+            position: absolute;
+        }
+        #score1{
+            margin-left: 270px;
+            margin-top: 20px;
+
+        }
+        #score2{
+            margin-top: 580px;
+        }
+        #gameOver{
+            position: absolute;
+            width: 340;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 19pt;
+            margin-top: 300px;
+        }
+        html, body{
+            margin: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+    </style>
+    <script type="text/javascript" src="jquery_library.js"></script>
+</head>
+<body>
+    <button id="redForward">Forward</button>
+    <canvas id="communist" ></canvas>
+    <canvas id="capitalist" ></canvas>
+    <div id="score">
+        <div class="score" id="score1">&nbsp;</div>
+        <div class="score" id="score2">&nbsp;</div>
+    </div>
+    <div id="gameOver">&nbsp;</div>
+    <button id="blueForward">Forward</button>
+</body>
+<script>
+    var redScore = 0;
+    var blueScore = 0;
+
+    var red = document.getElementById('communist');
+    var blue = document.getElementById('capitalist');
+    var ctxRed = red.getContext('2d');
+    var ctxBlue = blue.getContext('2d');
+    var redX = 90;
+    var redY = 100;
+    var redR = 50;
+    var blueX = 90;
+    var blueY = 400;
+    var blueR = 50;
+    function draw(){
+        ctxRed.canvas.width  = 170;
+        ctxRed.canvas.height = 500;
+        ctxBlue.canvas.width  = 170;
+        ctxBlue.canvas.height = 500;
+        ctxRed.beginPath();
+        ctxRed.arc(redX, redY, redR, 0, 2 * Math.PI);
+        ctxRed.fillStyle = 'red';
+        ctxRed.fill();
+        ctxRed.stroke();
+        ctxBlue.beginPath();
+        ctxBlue.arc(blueX, blueY, blueR, 0, 2 * Math.PI);
+        ctxBlue.fillStyle = 'blue';
+        ctxBlue.fill();
+        ctxBlue.stroke();
+    }
+
+    $(document).ready (
+        function(){
+            draw();
+            document.getElementById('score1').innerHTML = "Score: " + redScore;
+            document.getElementById('score2').innerHTML = "Score: " + blueScore;
+        }
+    );
+
+    $("#redForward").click(function() {
+        redY += 5;
+        if (redY >= 500){
+            updateScore("red");
+            reinitialize();
+        }
+        draw();
+    });
+
+    $("#blueForward").click(function() {
+        blueY -= 5;
+        if (blueY <= 0){
+            updateScore("blue");
+            reinitialize();
+        }
+        draw();
+    });
+
+    function updateScore(team){
+        if (team == "red"){
+            redScore++;
+            document.getElementById("score1").innerHTML = "Score: " + redScore;
+        }
+        else{
+            blueScore++;
+            document.getElementById("score2").innerHTML = "Score: " + blueScore;
+        }
+        if (redScore >= 3){
+            document.getElementById("gameOver").innerHTML = "Game Over: Communism Won";
+        }
+        if (blueScore >= 3){
+            document.getElementById("gameOver").innerHTML = "Game Over: Capitalism Won";
+        }
+    }
+
+    function reinitialize(){
+        redX = 90;
+        redY = 100;
+        blueX = 90;
+        blueY = 400;
+    }
+</script>
+</html>
